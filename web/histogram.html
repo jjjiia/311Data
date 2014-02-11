@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>chart</title>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<style>
+		div.bar{display:inline-block;width:20px;height:75px;background-color:red;}
+		.axis path{fill:none; stroke:black;}
+		.axis line{fill:none; stroke:black;}
+		.axis text{font-family: sans-serif; font-size:11px;};
+		</style>
+    </head>
+    <body>
+<script type="text/javascript">
+	var w = 800;
+	var h = 800;
+	var padding = 40;
+	var svg = d3.select("body")
+		.append("svg")
+		.attr("width", w)
+		.attr("height", h);
+	
+	var dataset = d3.csv('noise_allconstruction_coordinatesfreq.csv', function(data){
+		console.log(data)
+		dataset = data
+		var color = "red"
+		var y = 1
+		generateVis(color,y);
+	})
+
+	var dataset2 = d3.csv('noise_allhuman_freqonly.csv', function(data){
+		console.log(data)
+		dataset = data
+		var color = "blue"
+		var y = 1
+		generateVis(color,y);
+	})	
+	
+	function generateVis(color, y){
+		console.log("generate")
+
+		
+		console.log("scale")
+		var yScale = d3.scale.linear()
+			.domain([1,850])
+			.range([h-10,10]);
+			
+		
+		var rect = svg.selectAll("rect")
+			.data(dataset)
+			.enter()
+			.append("rect")
+			.attr("width",2)
+			.attr("height",function(d){return d.frequency*10})
+			.attr("x", function(d,i){return i})
+			.attr("y",function(d){return h-d.frequency*10*y})
+			.attr("fill", color)
+			.attr("opacity",0.5);
+			
+
+		var yAxis = d3.svg.axis()
+			.scale(yScale)
+			.orient("left")
+			.ticks(10);
+		
+		svg.append("g")
+			.attr("class", "axis")
+			.attr("transform", "translate("+padding+",0)")
+			.call(yAxis);
+	}
+
+		</script>
+    </body>
+</html>
