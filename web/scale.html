@@ -21,23 +21,14 @@
 		.attr("width", w)
 		.attr("height", h);
 	
-	var dataset = d3.csv('../data/noise_allconstruction_coordinatesfreq.csv', function(data){
-		console.log(data)
+	var dataset = d3.csv('../data/all_clean_noquot.csv', function(data){
+		//console.log(data)
 		dataset = data
-		var color = "red"
-		var x = 60
-		generateVis(color,x);
+		var x = 40
+		generateVis(x);
 	})
 
-	var dataset2 = d3.csv('../data/noise_allhuman_freqonly.csv', function(data){
-		console.log(data)
-		dataset = data
-		var color = "blue"
-		var x = 40;
-		generateVis(color,x);
-	})	
-	
-	function generateVis(color, x){
+	function generateVis(x){
 		console.log("generate")
 
 		
@@ -54,9 +45,17 @@
 			.attr("width",20)
 			.attr("x",x)
 			
-			.attr("y",function(d){return yScale(d.frequency)})
+			.attr("y",function(d){return yScale(parseFloat(d.frequency))})
 			.attr("height", 2)
-			.attr("fill", color)
+			.attr("fill",function(d){
+				//console.log("checkcolor")
+				if(d.category == "human"){
+					//console.log("true")
+				return "red";
+				}else{
+				return "black";	
+				}
+				})
 			.attr("opacity",0.1);
 			
 
