@@ -5,45 +5,57 @@
         <title>chart</title>
 		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<style>
+		#label1{position:absolute; top:140px;left:20px;color:#666;font-family:helvetica;font-size:11px;}
+		#logo{position:absolute; top:20px;left:20px;}
+		#title{position:absolute; top:120px;left:20px;color:#666;font-family:helvetica;font-size:26px;letter-spacing:2px;}
+		#subtitle{position:absolute; top:148px;left:22px;color:#666;font-family:helvetica;font-size:10px;letter-spacing:1px;}
+		#label1{position:absolute; top:190px;left:20px;color:#666;font-family:helvetica;font-size:10px;letter-spacing:1px;}
+		#barchart{position:absolute; top:230px;width:100px;height:450px;}
 		div.bar{display:inline-block;width:20px;height:75px;background-color:red;}
-		.axis path{fill:none; stroke:black;}
+		.axis path{fill:none; stroke:#fff;}
 		.axis line{fill:none; stroke:black;}
-		.axis text{font-family: sans-serif; font-size:11px;};
+		.axis text{font-family:helvetica; font-size:11px;color:#666;};
 		</style>
     </head>
     <body>
-<script type="text/javascript">
+		<div id = "logo"><img src="logo.png" width="70" height="69" alt="Logo"></div>
+		<div id = "title"><span style="color:#E53F21">Human</span> vs. <span style="color:#4776DB">Machine</span></div> 
+		<div id = "subtitle">Noise Complaints in New York City 2010 - 2013</div>
+		
+		<div id = "label1">Number of Incidents per Location</div>
+	
+		<div id = "barchart"></div>
+	<script type="text/javascript">
 	var w = 80;
-	var h = 600;
+	var h = 400;
 	var padding = 40;
-	var svg = d3.select("body")
-		.append("svg")
+	var svg = d3.select("#barchart")
+		.append("svg:svg")
 		.attr("width", w)
 		.attr("height", h);
 	
 	var dataset = d3.csv('../data/all_clean_noquot.csv', function(data){
 		//console.log(data)
 		dataset = data
-		var x = 40
-		generateVis(x);
+		generateVis();
 	})
 
-	function generateVis(x){
+	function generateVis(){
 		console.log("generate")
 
 		
 		console.log("scale")
 		var yScale = d3.scale.linear()
 			.domain([0,850])
-			.range([h-10,0]);
+			.range([h-20,10]);
 			
 		
 		var rect = svg.selectAll("rect")
 			.data(dataset)
 			.enter()
 			.append("rect")
-			.attr("width",20)
-			.attr("x",x)
+			.attr("width",10)
+			.attr("x",40)
 			
 			.attr("y",function(d){return yScale(parseFloat(d.frequency))})
 			.attr("height", 2)
@@ -51,7 +63,7 @@
 				//console.log("checkcolor")
 				if(d.category == "human"){
 					//console.log("true")
-				return "#C0533A";
+				return "#E53F21";
 				}else{
 				return "#4776DB";	
 				}
@@ -62,7 +74,7 @@
 		var yAxis = d3.svg.axis()
 			.scale(yScale)
 			.orient("left")
-			.ticks(10);
+			.ticks(8);
 		
 		svg.append("g")
 			.attr("class", "axis")
