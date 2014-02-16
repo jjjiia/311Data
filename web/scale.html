@@ -14,6 +14,7 @@
 		#subtitle{position:absolute; top:148px;left:22px;color:#000;font-family:helvetica;font-size:10px;letter-spacing:1px;}
 		#label1{position:absolute; top:200px;left:40px;color:#000;font-family:helvetica;font-size:10px;letter-spacing:1px;}
 		#barchart{position:absolute; top:230px; left:40px;}
+		#mapContainer{position:absolute; top:200px; left: 400px;}
 		div.bar{display:inline-block;width:20px;height:75px;background-color:red;}
 		.axis path{fill:none; stroke:#fff;}
 		.axis line{fill:none; stroke:black;}
@@ -24,11 +25,26 @@
 		<div id = "logo"><img src="logo.png" width="70" height="69" alt="Logo"></div>
 		<div id = "title"><span style="color:#E53F21">Human</span> vs. <span style="color:#4776DB">Machine</span></div> 
 		<div id = "subtitle">Noise Complaints in New York City 2010 - 2013</div>
-		<div id = "label1">Number of Incidents per Location</div>
+		<div id = "label1">Number of Incidents per Locations</div>
 		<div id = "barchart"></div>
-		<div id = "map"></div>
+		<div id = "mapContainer"></div>
 	<script type="text/javascript">
-	
+	window.onload = function () {
+			var mapOptions = {
+				src: "/nyc-borough-boundaries-polygon.geojson", 
+				width: 400, 
+				height: 400,
+				svgContainer: '#mapContainer',
+			}
+
+			map = new D3Map(mapOptions); 
+			map.load(function () {	
+			});
+
+			var labels = svg.append("g")
+			.attr("class", "labels")
+			.selectAll("text");
+		}
 	var w = 80;
 	var h = 400;
 	var padding = 40;
