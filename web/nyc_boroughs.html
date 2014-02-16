@@ -1,0 +1,33 @@
+<!Doctype HTML>
+<html>
+	<head>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://d3js.org/topojson.v1.min.js"></script>
+		<script src="/d3-utils.js"></script>
+		<script>
+		
+		window.onload = function () {
+			var mapOptions = {
+				src: "/nyc-borough-boundaries-polygon.geojson", 
+				width: 600, 
+				height: 600,
+				svgContainer: '#mapContainer',
+			}
+			
+			map = new D3Map(mapOptions); 
+			map.load(function () {	
+			});
+		
+			var labels = svg.append("g")
+			.attr("class", "labels")
+			.selectAll("text")
+			.adat()
+		}
+		
+		</script>
+	</head>
+	<body>
+		<div id="mapContainer">
+		</div>
+	</body>
+</html>
