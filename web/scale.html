@@ -2,19 +2,21 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>chart</title>
+        <title>311 Noise</title>
 		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="http://d3js.org/topojson.v1.min.js"></script>
 		<script src="/d3-utils.js"></script>
 		
 		<style>
 		#label1{position:absolute; top:140px;left:20px;color:#000;font-family:helvetica;font-size:11px;}
-		#logo{position:absolute; top:30px;left:30px;}
-		#title{position:absolute; top:130px;left:20px;color:#000;font-family:helvetica;font-size:26px;letter-spacing:2px;}
-		#subtitle{position:absolute; top:158px;left:22px;color:#000;font-family:helvetica;font-size:10px;letter-spacing:1px;}
+		#logo{position:absolute; top:30px;left:35px;}
+		#title{position:absolute; top:130px;left:20px;color:#000;font-family:helvetica;font-size:28px;letter-spacing:1px;}
+		#subtitle{position:absolute; top:160px;left:22px;color:#000;font-family:helvetica;font-size:10px;letter-spacing:1px;}
 		#label1{position:absolute; top:200px;left:40px;color:#000;font-family:helvetica;font-size:10px;letter-spacing:1px;}
 		#barchart{position:absolute; top:230px; left:40px;}
-		.mapContainer{position:absolute; top:20px; left: 400px; border:solid 1px black;}
+		#footer{position: absolute; bottom: 10px; left: 20px; width: 90%; font-family:'helvetica';font-size:10px;color:#000;}
+		
+		.mapContainer{position:absolute; top:20px; left: 400px;}
 		div.bar{display:inline-block;width:20px;height:75px;background-color:red;}
 		.axis path{fill:none; stroke:#fff;}
 		.axis line{fill:none; stroke:black;}
@@ -25,32 +27,22 @@
 		<div id = "logo"><img src="logo.png" width="70" height="69" alt="Logo"></div>
 		<div id = "title"><span style="color:#E53F21">Human</span> vs. <span style="color:#4776DB">Machine</span></div> 
 		<div id = "subtitle">Noise Complaints in New York City 2010 - 2013</div>
-		<div id = "label1">Number of Incidents per Locations</div>
+		<div id = "label1">Number of Incidents per Location</div>
 		<div id = "barchart"></div>
 		<div id = "mapContainer"></div>
+		<div id="footer">This work is part of the You Are Here project + The Social Computing Group + MIT Media Lab + MIT   |   Data Source</div>
+		
 	<script type="text/javascript">
-	/*window.onload = function () {
-			var mapOptions = {
-				src: "/nyc-borough-boundaries-polygon.geojson", 
-				width: 400, 
-				height: 400,
-				svgContainer: '#mapContainer',
-			}
-
-			map = new D3Map(mapOptions); 
-			map.load(function () {	
-			});
-
-		}*/
 	var w = 80;
 	var h = 400;
 	var padding = 40;
 	var svg = d3.select("#barchart")
-		.append("svg:svg")
+		.append("svg")
 		.attr("width", w)
 		.attr("height", h);
 		
-	var dataset = d3.csv('../data/all_clean_noquot.csv', function(data){
+	var dataset = null
+	d3.csv('all_clean_noquot.csv', function(data){
 		dataset = data;
 		generateMap();
 		generateVis();
@@ -87,13 +79,13 @@
 			.call(yAxis);
 	};
 	function generateMap(){
-		console.log("map")
+		console.log("generate map")
 		var w = 600;
 		var h = 800;
 
 		//Define map projection
 		var projection = d3.geo.mercator()
-	   							.center([-73.95184774646, 40.82767252047])
+	   						   .center([-73.95949836511184,40.82003986269106])
 							   .translate([w/2, h/2])
 							   .scale([42000]);
 		//Define path generator
@@ -108,7 +100,7 @@
 			   	 	.attr("class", "mapContainer");
 		//Load in GeoJSON data
 		//d3.json("nyc-borough-boundaries-polygon.geojson", function(json) {
-			d3.json("nyc-borough-boundaries-polygon.geojson", function(json) {
+		/*	d3.json("nyc-borough-boundaries-polygon.geojson", function(json) {
 			//Bind data and create one path per GeoJSON feature
 			svg.selectAll("path")
 			   .data(json.features)
@@ -116,16 +108,27 @@
 			   .append("path")
 			   .attr("d", path)
 			   .style("fill", "#ddd");
-		});
-		svg.selectAll("circle")
+		});*/
+		
+		svg.selectAll("rect")
 		.data(dataset)
 		.enter()
-		.append("circle")
-		.attr("cx", function(d){return projection([d.lng])[0];})
-		.attr("cy", function(d){return projection([d.lat])[1];})
-		.attr("r", 5)
-		.style("fill", "red")
+		.append("rect")
+		.attr("x", function(d){return projection([d.lng, d.lat])[0];})
+		//.attr("cy", 20)
+		.attr("y", function(d){return projection([d.lng, d.lat])[1]-parseFloat(d.frequency)})
+		.attr("height", function(d){return parseFloat(d.frequency)})
+		.attr("width", 1)
+		.attr("fill",function(d){
+			if(d.category == "human"){
+			return "#E53F21";
+			}else{
+			return "#4776DB";}
+			})
+		.style("opacity", 0.1)
 	};
+	
+	
 		</script>
     </body>
 </html>
