@@ -9,7 +9,7 @@
 		
 		<style>
 		#label1{position:absolute; top:140px;left:20px;color:#000;font-family:helvetica;font-size:11px;}
-		#logo{position:absolute; top:20px;left:20px;}
+		#logo{position:absolute; top:30px;left:30px;}
 		#title{position:absolute; top:120px;left:20px;color:#000;font-family:helvetica;font-size:26px;letter-spacing:2px;}
 		#subtitle{position:absolute; top:148px;left:22px;color:#000;font-family:helvetica;font-size:10px;letter-spacing:1px;}
 		#label1{position:absolute; top:200px;left:40px;color:#000;font-family:helvetica;font-size:10px;letter-spacing:1px;}
@@ -54,7 +54,8 @@
 		.attr("height", h);
 		
 	var dataset = d3.csv('../data/all_clean_noquot.csv', function(data){
-		dataset = data
+		dataset = data;
+		generateMap();
 		generateVis();
 	})
 	
@@ -68,7 +69,7 @@
 			.data(dataset)
 			.enter()
 			.append("rect")
-			.attr("width",10)
+			.attr("width",20)
 			.attr("x",40)			
 			.attr("y",function(d){return yScale(parseFloat(d.frequency))})
 			.attr("height", 2)
@@ -87,6 +88,10 @@
 			.attr("class", "axis")
 			.attr("transform", "translate("+padding+",0)")
 			.call(yAxis);
+	}
+	function generateMap(){
+		console.log("map")
+		
 	}
 		</script>
     </body>
