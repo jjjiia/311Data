@@ -4,29 +4,37 @@
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<script src="http://d3js.org/topojson.v1.min.js"></script>
 		<script src="/d3-utils.js"></script>
-		<script>
 		
-		window.onload = function () {
-			var mapOptions = {
-				src: "/nyc-borough-boundaries-polygon.geojson", 
-				width: 600, 
-				height: 600,
-				svgContainer: '#mapContainer',
-			}
-			
-			map = new D3Map(mapOptions); 
-			map.load(function () {	
-			});
-		
-			var labels = svg.append("g")
-			.attr("class", "labels")
-			.selectAll("text")
-			.adat()
-		}
-		
-		</script>
 	</head>
 	<body>
+		<script>
+		var w = 1200;
+		var h = 1600;
+		
+		var projection = d3.geo.albersUsa()
+			.translate([w/2, h/2])
+			.scale([20000]);
+		var path = d3.geo.path()
+			.projection(projection);
+		var svg = d3.select("body")
+			.append("svg")
+			.attr("width", w)
+			.attr("height", h);
+			
+		d3.json("/nyc.json", function(json){
+			console.log("maploading")
+			svg.selectAll("path")
+			.data(json.features)
+			.enter()
+			.append("path")
+			.attr("d", path)
+			.attr("fill", "black");		
+		});
+		
+		console.log("ilikecats");
+		
+		
+		</script>
 		<div id="mapContainer">
 		</div>
 	</body>
