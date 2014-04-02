@@ -16,31 +16,26 @@
 		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
 		  ga('create', 'UA-47759411-2', 'youarehere.cc');
-
 		  ga('send', 'pageview');
-
 		</script>
     </head>
     <body>
 		<a href="http://youarehere.media.mit.edu"><img id="logo" src="logo_png24.png" width="60" height="60" alt="Logo"></a>
 		
 		<div id = "title">New York City</div> 
-		<div id = "subtitle">This map visualizes 168,491 noise complaints by source in New York City, NY <br/>from 2010 to 2013 ... more</div>
+		<div id = "subtitle">This map visualizes 168,491 noise complaints by source in New York City, NY <br/>from 2010 to 2013 <a href="#" id="showMore">... more</a></div>
 		<div id = "label1">Incidents per Location</div>
 		
 		<div id = "barchart">
 			<div id="slider"></div>
 		</div>
 		<div id = "mapContainer"></div>
-		
 		<div id = "filter"> 
 			<form>Filter By:
 			<label><input type="radio" name="layout" value="human"><span style="color:#E53F21"> human</span></label>
     		<label><input type="radio" name="layout" value="machine"><span style="color:#4776DB"> machine</span></label>
     		<label><input type="radio" name="layout" value="all" checked><span style="color:#000000"> all</span></label>
-			
 			</form>
 		</div>
 
@@ -52,25 +47,27 @@
 	        <a href="http://media.mit.edu"> MIT Media Lab </a>
 	        <span class="footer-plus">+</span>
 	        <a href="http://mit.edu"> MIT</a>
-	        &nbsp
-	        <span class="footer-plus">|</span>
-	        &nbsp
-	        <span id="data-source" class='footer-highlight'> Data Source</span>
 	    </div>
 
-	    <div id='data-lightbox'>
-		    <div id='lightbox-close' class="glyphicon glyphicon-remove"></div>
-			This visualization visualizes 168,491 noise complaints recorded by NYC's 311 service between 2010 - 2013. These noises are 72% Human and 29% Machine.
-			<br/><br/>
-			For this visualization,
-			Human noise is made up of Loud Music/Party, Loud Talking, Peopled Created Noise, Car/Truck Music. 
-			Machine noise is made up of Construction Equipment, Jack Hammering, Construction Before/After Hours
-			<br/><br/>
-		    This data comes from  <a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9" class="footer-highlight-link"> New York City's Open Data Portal</a>.
-		</div>
 
 		<p id="noise_stats"></p>
 		<p id = "location_stats"></p>
+		
+				<div id="essayBox">
+					<div id='essayBox-close' class="glyphicon glyphicon-remove"></div>
+							    <!-- <h1> Essay Title </h1>  -->
+		<div id='essayContent'>
+		<p>This map of New York City visualizes 168,491 noise complaints recorded by NYC's 311 service between 2010 - 2013.</p>
+		<p>New York City is full of noise, yet most noise, or the noise we can live with is invisible. This map shows the noise that we consider to be out of the ordinary or unpleasant enough to try to stop. The noise complaints are categorized into human and machine noises. In our categorization, human noise is made up of Loud Music/Party, Loud Talking, People Created Noise, and Car/Truck Music. Machine noise is made up of Construction Equipment, Jack Hammering, and Construction Before/After Hours. For New York City as a whole, the noises are 72% Human and 29% Machine.</p>
+		<p>Machine noise indicates construction, and these occur at a high concentration in downtown Brooklyn and all over Manhattan. Queens is the borough that has the least amount of machine noise complaints, roughly 10 percent. Human noises have a higher number of occurrences at the same location, as loud people are likely to be loud over a long period of time. These repeat offenders are not just bars and nightclubs, they include, surprisingly, multiple houses of worship.</p>
+		<p>Click on the choices under "Filter By" to filter by human or machine noise. To see aggregated borough data, rollover borough. To see detailed location data such as address and description of the noise and the type of location, rollover bar graph.</p>
+		<p>Noise complaints are recorded by the 311 service in New York City. These are made public through the gov.data initiative and can be found at https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9. The dataset in its entirety contains all 311 service requests from the infrastructural (road repair, traffic lights, electrical outages) to isolated incidents (heating, lead testing, graffiti removal and noise complaints), as long as they directly effect the everyday lives of citizens. We isolated the noise complaint requests from this larger dataset.</p>
+		<h4> Data Sources </h4>
+		<ol>
+		<li><a href="https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9" target="blank">Socrata NYC Open Data </a></li>
+		</ol>
+		</div>
+		</div>
 	<script type="text/javascript">
 	var w = 80;
 	var h = 350;
@@ -132,17 +129,6 @@
 		d3.select("input[value=\"human\"]").on("click", function(){ filter_data('human');});
 		d3.select("input[value=\"machine\"]").on("click",function(){ filter_data('machine')});
 		d3.select("input[value=\"all\"]").on("click", function(){filter_data('all')});
-	}
-
-	function closeLightBox(){
-	  if (lightBoxShown){
-	      $('#data-lightbox').animate({
-	        'opacity':0.0}, 'fast'
-	      );
-
-	      $('#mapSVG').animate({'opacity':1.0},'slow');
-	      lightBoxShown = false;
-	    };
 	}
 
 	function bound_data(lower, upper){
@@ -317,7 +303,42 @@
 		});
 	}
 	
-	
+    var essayBoxShown = false;
+     $('#showMore').click(function(e){
+         e.preventDefault();
+         essayBoxShown = !essayBoxShown;
+         if (essayBoxShown) {
+             $('#essayBox').css('display', 'block');
+             $('#essayBox').animate({'opacity':1.0}, 500);
+             $(this).text(' ... view map ');
+         } else {
+             closeEssayBox();
+             $(this).text(' ... more ');
+         }
+
+       })
+
+
+       $('#essayBox-close').click(function(){
+		   console.log("close")
+         closeEssayBox();
+         $('#showMore').text(' ... more ');
+       });
+
+       $('#essayBox').click(function () {
+           closeEssayBox(); 
+           $('#showMore').text(' ... more ');
+       });
+
+      function closeEssayBox(){
+       $('#essayBox').animate({'opacity':0.0}, 500, function () {
+         $('#essayBox').css('display', 'none');
+       })
+       essayBoxShown = false;
+     }
+	 	
 		</script>
+
+		
     </body>
 </html>
